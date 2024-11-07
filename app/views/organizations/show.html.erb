@@ -67,14 +67,16 @@
             <% @organization.campaigns.each do |campaign| %>
               <tr class="border-b border-gray-100">
                 <td class="max-w-0 px-0 py-5 align-top">
-                  <div class="truncate font-medium text-gray-900"><%= campaign.title %></div>
-                  <div class="truncate text-gray-500"><%= campaign.description %></div>
+                  <%= link_to organization_campaign_path(@organization, campaign), class: "hover:underline" do %>
+                    <div class="truncate font-medium text-gray-900"><%= campaign.name %></div>
+                    <div class="truncate text-gray-500"><%= campaign.description %></div>
+                  <% end %>
                 </td>
                 <td class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">
-                  <%= number_to_currency(campaign.goal_amount) %>
+                  <%= number_to_currency(campaign.goal) %>
                 </td>
                 <td class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">
-                  <%= number_to_currency(campaign.amount_raised) %>
+                  <%= number_to_currency(campaign.total_money_raised) %>
                 </td>
                 <td class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">
                   <%= number_to_percentage(campaign.progress, precision: 0) %>

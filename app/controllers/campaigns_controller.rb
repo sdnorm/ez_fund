@@ -1,5 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :set_campaign, only: %i[ show edit update destroy ]
+  before_action :set_organization
 
   # GET /campaigns or /campaigns.json
   def index
@@ -12,7 +13,7 @@ class CampaignsController < ApplicationController
 
   # GET /campaigns/new
   def new
-    @campaign = Campaign.new
+    @campaign = @organization.campaigns.build
   end
 
   # GET /campaigns/1/edit
@@ -21,11 +22,11 @@ class CampaignsController < ApplicationController
 
   # POST /campaigns or /campaigns.json
   def create
-    @campaign = Campaign.new(campaign_params)
+    @campaign = @organization.campaigns.build(campaign_params)
 
     respond_to do |format|
       if @campaign.save
-        format.html { redirect_to @campaign, notice: "Campaign was successfully created." }
+        format.html { redirect_to organization_campaign_path(@organization, @campaign), notice: "Campaign was successfully created." }
         format.json { render :show, status: :created, location: @campaign }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -52,7 +53,7 @@ class CampaignsController < ApplicationController
     @campaign.destroy!
 
     respond_to do |format|
-      format.html { redirect_to campaigns_path, status: :see_other, notice: "Campaign was successfully destroyed." }
+      format.html { redirect_to organization_campaigns_path(@organization), status: :see_other, notice: "Campaign was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -60,11 +61,15 @@ class CampaignsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_campaign
-      @campaign = Campaign.find(params.expect(:id))
+      @campaign = Campaign.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def campaign_params
-      params.expect(campaign: [ :organization_id, :start_date, :end_date, :name, :description, :active, :commission_rate ])
+      params.require(:campaign).permit(:start_date, :end_date, :name, :description, :active, :commission_rate)
+    end
+
+    def set_organization
+      @organization = Organization.find(params[:organization_id])
     end
 end

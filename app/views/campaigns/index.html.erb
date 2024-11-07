@@ -7,14 +7,14 @@
 
   <div class="flex justify-between items-center">
     <h1 class="font-bold text-4xl">Campaigns</h1>
-    <%= link_to "New campaign", new_campaign_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+    <%= link_to "New campaign", new_organization_campaign_path(@organization), class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
   </div>
 
   <div id="campaigns" class="min-w-full">
     <% @campaigns.each do |campaign| %>
       <%= render campaign %>
       <p>
-        <%= link_to "Show this campaign", campaign, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+        <%= link_to "Show this campaign", organization_campaign_path(@organization, campaign), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
       </p>
     <% end %>
   </div>

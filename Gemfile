@@ -67,3 +67,5 @@ end
 
 gem "pay"
 gem "stripe"
+
+gem "annotate"

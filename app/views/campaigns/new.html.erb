@@ -1,7 +1,22 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New campaign</h1>
+<div class="max-w-2xl mx-auto pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-4xl font-bold text-gray-900">New Campaign</h1>
+  
+  <div class="mt-8">
+    <h2 class="text-xl font-medium text-gray-900">Campaign Details</h2>
+    <p class="mt-1 text-sm text-gray-500">Fill in the information below to create your campaign.</p>
+  </div>
 
-  <%= render "form", campaign: @campaign %>
+  <div class="mt-6">
+    <%= render "form", campaign: @campaign, organization: @organization %>
+  </div>
 
-  <%= link_to "Back to campaigns", campaigns_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <div class="mt-6">
+    <%= link_to organization_campaigns_path(@organization), 
+        class: "inline-flex items-center text-sm text-gray-500 hover:text-gray-700" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to campaigns
+    <% end %>
+  </div>
 </div>
