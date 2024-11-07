@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :purchases
+  resources :participants
+  resources :campaigns
   resources :registrations, only: [ :new, :create ]
   resources :organizations
   get "pages/index"

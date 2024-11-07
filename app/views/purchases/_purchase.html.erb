@@ -1,0 +1,27 @@
+<div id="<%= dom_id purchase %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Participant:</strong>
+    <%= purchase.participant_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Donor:</strong>
+    <%= purchase.donor_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Amount:</strong>
+    <%= purchase.amount %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Status:</strong>
+    <%= purchase.status %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Stripe transaction:</strong>
+    <%= purchase.stripe_transaction_id %>
+  </p>
+
+</div>

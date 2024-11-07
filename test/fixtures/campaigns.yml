@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organization: one
+  start_date: 2024-11-06 21:49:53
+  end_date: 2024-11-06 21:49:53
+  name: MyString
+  description: MyText
+  active: false
+  commission_rate: 9.99
+
+two:
+  organization: two
+  start_date: 2024-11-06 21:49:53
+  end_date: 2024-11-06 21:49:53
+  name: MyString
+  description: MyText
+  active: false
+  commission_rate: 9.99
