@@ -9,7 +9,7 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       start_new_session_for(@user)
-      redirect_to root_path, notice: "Signed up successfully!"
+      redirect_to new_organization_path, notice: "Signed up successfully! <br><br> Now let's add your organization."
     else
       render :new
     end
@@ -18,6 +18,12 @@ class RegistrationsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email_address, :password, :password_confirmation)
+    params.require(:user).permit(
+      :first_name,
+      :last_name,
+      :email_address,
+      :password,
+      :password_confirmation
+    )
   end
 end

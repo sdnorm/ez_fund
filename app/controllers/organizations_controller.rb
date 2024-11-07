@@ -1,5 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: %i[ show edit update destroy ]
+  before_action :set_current_user
 
   # GET /organizations or /organizations.json
   def index
@@ -23,6 +24,8 @@ class OrganizationsController < ApplicationController
   def create
     @organization = Organization.new(organization_params)
 
+    @organization.owner = @current_user
+    @organization.contact_email = @current_user.email_address
     respond_to do |format|
       if @organization.save
         format.html { redirect_to @organization, notice: "Organization was successfully created." }
@@ -65,6 +68,6 @@ class OrganizationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.expect(organization: [ :name, :address_1, :address_2, :city, :state, :contact_email, :owner_id ])
+      params.expect(organization: [ :name, :address_1, :address_2, :city, :state, :contact_email ])
     end
 end

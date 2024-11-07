@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  resources :purchases
-  resources :participants
-  resources :campaigns
   resources :registrations, only: [ :new, :create ]
-  resources :organizations
+  resources :organizations do
+    resources :campaigns
+    resources :participants
+    resources :purchases
+  end
   get "pages/index"
   resource :session
   resources :passwords, param: :token
