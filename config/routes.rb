@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :registrations, only: [ :new, :create ]
+  resources :organizations
   get "pages/index"
   resource :session
   resources :passwords, param: :token

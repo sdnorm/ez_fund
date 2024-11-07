@@ -24,8 +24,15 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <%= render "shared/alert" %>
+    <div class="bg-white">
+      <% if signed_in? %>
+        <%= render "shared/authenticated_nav" %>
+      <% else %>
+        <%= render "shared/nav" %>
+      <% end %>
       <%= yield %>
-    </main>
+      <%= render "shared/footer" %>
+    </div>
   </body>
 </html>
