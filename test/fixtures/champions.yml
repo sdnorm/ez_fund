@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: champions
+#
+#  id            :bigint           not null, primary key
+#  first_name    :string
+#  last_name     :string
+#  email_address :string
+#  campaign_id   :bigint           not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
+one:
+  first_name: MyString
+  last_name: MyString
+  email_address: MyString
+  campaign: one
+
+two:
+  first_name: MyString
+  last_name: MyString
+  email_address: MyString
+  campaign: two

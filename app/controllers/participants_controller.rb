@@ -1,70 +1,43 @@
+require "csv"
+
 class ParticipantsController < ApplicationController
-  before_action :set_participant, only: %i[ show edit update destroy ]
+  include Pagy::Backend
+  before_action :set_organization
+  before_action :set_campaign
 
-  # GET /participants or /participants.json
   def index
-    @participants = Participant.all
+    @pagy, @participants = pagy(@campaign.participants, items: 25)
   end
 
-  # GET /participants/1 or /participants/1.json
-  def show
+  def import
   end
 
-  # GET /participants/new
-  def new
-    @participant = Participant.new
-  end
-
-  # GET /participants/1/edit
-  def edit
-  end
-
-  # POST /participants or /participants.json
-  def create
-    @participant = Participant.new(participant_params)
-
-    respond_to do |format|
-      if @participant.save
-        format.html { redirect_to @participant, notice: "Participant was successfully created." }
-        format.json { render :show, status: :created, location: @participant }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @participant.errors, status: :unprocessable_entity }
-      end
+  def process_import
+    if params[:file].present?
+      import = @campaign.imports.create!(
+        status: :pending,
+        filename: params[:file].original_filename
+      )
+      import.file.attach(params[:file])
+      ImportParticipantsJob.perform_later(import.id)
+      redirect_to organization_campaign_path(@organization, @campaign),
+        notice: "Import started. You will be notified when it is done or if there is an issue."
+    else
+      redirect_to import_organization_campaign_participants_path(@organization, @campaign),
+        alert: "Please select a file to import."
     end
-  end
-
-  # PATCH/PUT /participants/1 or /participants/1.json
-  def update
-    respond_to do |format|
-      if @participant.update(participant_params)
-        format.html { redirect_to @participant, notice: "Participant was successfully updated." }
-        format.json { render :show, status: :ok, location: @participant }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @participant.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /participants/1 or /participants/1.json
-  def destroy
-    @participant.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to participants_path, status: :see_other, notice: "Participant was successfully destroyed." }
-      format.json { head :no_content }
-    end
+  rescue StandardError => e
+    redirect_to import_organization_campaign_participants_path(@organization, @campaign),
+      alert: "Error scheduling import: #{e.message}"
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_participant
-      @participant = Participant.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def participant_params
-      params.expect(participant: [ :first_name, :last_name, :teacher, :unique_calendar_link, :campaign_id ])
-    end
+  def set_organization
+    @organization = Organization.find(params[:organization_id])
+  end
+
+  def set_campaign
+    @campaign = @organization.campaigns.find(params[:campaign_id])
+  end
 end

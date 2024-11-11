@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.0.rc2"
+gem "rails", "~> 8.0.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
@@ -67,5 +67,7 @@ end
 
 gem "pay"
 gem "stripe"
-
 gem "annotate"
+gem "pagy"
+gem "aws-sdk-s3"
+gem "mission_control-jobs"

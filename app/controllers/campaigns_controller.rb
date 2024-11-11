@@ -39,7 +39,7 @@ class CampaignsController < ApplicationController
   def update
     respond_to do |format|
       if @campaign.update(campaign_params)
-        format.html { redirect_to @campaign, notice: "Campaign was successfully updated." }
+        format.html { redirect_to organization_campaign_path(@organization, @campaign), notice: "Campaign was successfully updated." }
         format.json { render :show, status: :ok, location: @campaign }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -66,7 +66,15 @@ class CampaignsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def campaign_params
-      params.require(:campaign).permit(:start_date, :end_date, :name, :description, :active, :commission_rate)
+      params.require(:campaign).permit(
+        :start_date,
+        :end_date,
+        :name,
+        :description,
+        :active,
+        :commission_rate,
+        :goal,
+      )
     end
 
     def set_organization

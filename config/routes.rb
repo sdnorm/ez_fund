@@ -1,8 +1,18 @@
 Rails.application.routes.draw do
   resources :registrations, only: [ :new, :create ]
   resources :organizations do
-    resources :campaigns
-    resources :participants
+    resources :campaigns do
+      resources :champions
+      resources :participants do
+        collection do
+          get :import
+          post :process_import
+        end
+      end
+    end
+    collection do
+      post :import_participants
+    end
     resources :purchases
   end
   get "pages/index"

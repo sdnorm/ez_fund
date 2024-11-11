@@ -13,4 +13,9 @@
 #
 class Participant < ApplicationRecord
   belongs_to :campaign
+  belongs_to :champion, optional: true
+
+  def total_money_raised
+    purchases.successful_campaign_purchases.sum(:amount)
+  end
 end

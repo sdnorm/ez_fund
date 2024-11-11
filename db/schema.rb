@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_07_043238) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_11_171007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_07_043238) do
     t.index ["organization_id"], name: "index_campaigns_on_organization_id"
   end
 
+  create_table "champions", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email_address"
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_champions_on_campaign_id"
+  end
+
   create_table "donors", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name"
@@ -64,6 +74,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_07_043238) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_donors_on_email_address", unique: true
+  end
+
+  create_table "imports", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.string "status"
+    t.text "error_message"
+    t.bigint "import_count"
+    t.string "filename"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_imports_on_campaign_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -88,7 +109,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_07_043238) do
     t.bigint "campaign_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "champion_id"
     t.index ["campaign_id"], name: "index_participants_on_campaign_id"
+    t.index ["champion_id"], name: "index_participants_on_champion_id"
   end
 
   create_table "purchases", force: :cascade do |t|
@@ -129,8 +152,11 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_07_043238) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns", "organizations"
+  add_foreign_key "champions", "campaigns"
+  add_foreign_key "imports", "campaigns"
   add_foreign_key "organizations", "users", column: "owner_id"
   add_foreign_key "participants", "campaigns"
+  add_foreign_key "participants", "champions"
   add_foreign_key "purchases", "campaigns"
   add_foreign_key "purchases", "donors"
   add_foreign_key "purchases", "organizations"
