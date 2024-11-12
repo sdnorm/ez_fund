@@ -97,15 +97,7 @@ development:
   primary: &primary_development
     <<: *default
     database: ez_fund_development
-  cache:
-    <<: *primary_development
-    database: ez_fund_development_cache
-    migrations_paths: db/cache_migrate
   queue:
     <<: *primary_development
     database: ez_fund_development_queue
     migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_development
-    database: ez_fund_development_cable
-    migrations_paths: db/cable_migrate

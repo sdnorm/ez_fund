@@ -47,6 +47,7 @@ module Authentication
 
     def after_authentication_url
       flash[:notice] = "You've been logged in."
+      organization_path(Current.organization) || session.delete(:return_to_after_authenticating) || root_url
       session.delete(:return_to_after_authenticating) || root_url
     end
 

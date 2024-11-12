@@ -26,8 +26,10 @@
   <body>
     <%= render "shared/alert" %>
     <div class="bg-white">
-      <% if signed_in? %>
+      <% if signed_in? && @organization.present? %>
         <%= render "shared/authenticated_nav" %>
+      <% elsif signed_in? %>
+        <%= render "shared/authenticated_org_signup_nav" %>
       <% else %>
         <%= render "shared/nav" %>
       <% end %>

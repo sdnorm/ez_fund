@@ -6,7 +6,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
+    params.permit(:authenticity_token, :commit, :email_address, :password)
+    if user = User.authenticate_by({ email_address: params[:email_address], password: params[:password] })
       start_new_session_for user
       redirect_to after_authentication_url, notice: "You've been logged in."
     else

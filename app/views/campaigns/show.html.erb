@@ -3,3 +3,11 @@
     <%= render @campaign %>
   </div>
 </div>
+
+<% if policy(@campaign).update? %>
+  <%= link_to "Edit Campaign", edit_campaign_path(@campaign) %>
+<% end %>
+
+<% if policy(@campaign).destroy? %>
+  <%= button_to "Delete Campaign", campaign_path(@campaign), method: :delete %>
+<% end %>
