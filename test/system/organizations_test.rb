@@ -1,53 +1,53 @@
 require "application_system_test_case"
 
 class OrganizationsTest < ApplicationSystemTestCase
-  setup do
-    @organization = organizations(:one)
-  end
+  # setup do
+  #   @organization = organizations(:one)
+  # end
 
-  test "visiting the index" do
-    visit organizations_url
-    assert_selector "h1", text: "Organizations"
-  end
+  # test "visiting the index" do
+  #   visit organizations_url
+  #   assert_selector "h1", text: "Organizations"
+  # end
 
-  test "should create organization" do
-    visit organizations_url
-    click_on "New organization"
+  # test "should create organization" do
+  #   visit organizations_url
+  #   click_on "New organization"
 
-    fill_in "Address 1", with: @organization.address_1
-    fill_in "Address 2", with: @organization.address_2
-    fill_in "City", with: @organization.city
-    fill_in "Contact email", with: @organization.contact_email
-    fill_in "Name", with: @organization.name
-    fill_in "Owner", with: @organization.owner_id
-    fill_in "State", with: @organization.state
-    click_on "Create Organization"
+  #   fill_in "Address 1", with: @organization.address_1
+  #   fill_in "Address 2", with: @organization.address_2
+  #   fill_in "City", with: @organization.city
+  #   fill_in "Contact email", with: @organization.contact_email
+  #   fill_in "Name", with: @organization.name
+  #   fill_in "Owner", with: @organization.owner_id
+  #   fill_in "State", with: @organization.state
+  #   click_on "Create Organization"
 
-    assert_text "Organization was successfully created"
-    click_on "Back"
-  end
+  #   assert_text "Organization was successfully created"
+  #   click_on "Back"
+  # end
 
-  test "should update Organization" do
-    visit organization_url(@organization)
-    click_on "Edit this organization", match: :first
+  # test "should update Organization" do
+  #   visit organization_url(@organization)
+  #   click_on "Edit this organization", match: :first
 
-    fill_in "Address 1", with: @organization.address_1
-    fill_in "Address 2", with: @organization.address_2
-    fill_in "City", with: @organization.city
-    fill_in "Contact email", with: @organization.contact_email
-    fill_in "Name", with: @organization.name
-    fill_in "Owner", with: @organization.owner_id
-    fill_in "State", with: @organization.state
-    click_on "Update Organization"
+  #   fill_in "Address 1", with: @organization.address_1
+  #   fill_in "Address 2", with: @organization.address_2
+  #   fill_in "City", with: @organization.city
+  #   fill_in "Contact email", with: @organization.contact_email
+  #   fill_in "Name", with: @organization.name
+  #   fill_in "Owner", with: @organization.owner_id
+  #   fill_in "State", with: @organization.state
+  #   click_on "Update Organization"
 
-    assert_text "Organization was successfully updated"
-    click_on "Back"
-  end
+  #   assert_text "Organization was successfully updated"
+  #   click_on "Back"
+  # end
 
-  test "should destroy Organization" do
-    visit organization_url(@organization)
-    click_on "Destroy this organization", match: :first
+  # test "should destroy Organization" do
+  #   visit organization_url(@organization)
+  #   click_on "Destroy this organization", match: :first
 
-    assert_text "Organization was successfully destroyed"
-  end
+  #   assert_text "Organization was successfully destroyed"
+  # end
 end

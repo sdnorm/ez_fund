@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_action :set_campaign, only: [:show, :edit, :update, :destroy]
+  before_action :set_campaign, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @campaigns = policy_scope(Campaign)

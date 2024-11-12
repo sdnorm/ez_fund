@@ -5,4 +5,4 @@ module MultiTenantHelper
   ensure
     ActsAsTenant.current_tenant = nil
   end
-end 
+end
