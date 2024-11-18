@@ -1,7 +1,6 @@
 class PagesController < ApplicationController
-  allow_unauthenticated_access
+  # skip_before_action :require_organization
 
   def index
-    puts "Current session: #{Current.session.inspect}"
   end
 end

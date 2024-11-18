@@ -65,11 +65,17 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem "devise"
+gem "omniauth"
+
 gem "pay"
 gem "stripe"
-gem "annotate"
+# gem "annotate"
 gem "pagy"
 gem "aws-sdk-s3"
 gem "mission_control-jobs"
 gem "acts_as_tenant"
 gem "pundit"
+gem "madmin"
+gem "csv"
+gem "stringio", "~> 3.1"

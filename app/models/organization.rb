@@ -1,20 +1,3 @@
-# == Schema Information
-#
-# Table name: organizations
-#
-#  id            :bigint           not null, primary key
-#  name          :string
-#  address_1     :string
-#  address_2     :string
-#  city          :string
-#  state         :string
-#  contact_email :string
-#  owner_id      :bigint           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  time_zone     :string
-#  subdomain     :string
-#
 class Organization < ApplicationRecord
   belongs_to :owner, class_name: "User"
 
@@ -27,6 +10,12 @@ class Organization < ApplicationRecord
 
   validates :name, presence: true
   validates :subdomain, presence: true, uniqueness: true
+
+  before_create :set_subdomain
+
+  def set_subdomain
+    self.subdomain = name.parameterize
+  end
 
   def total_money_raised
     purchases.sum(:amount)
@@ -41,10 +30,6 @@ class Organization < ApplicationRecord
   end
 
   has_one_attached :logo
-
-  def owner
-    user_roles.find_by(role: "owner")&.user
-  end
 
   def admins
     user_roles.where(role: %w[owner admin]).includes(:user).map(&:user)

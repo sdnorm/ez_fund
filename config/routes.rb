@@ -1,36 +1,56 @@
 Rails.application.routes.draw do
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # authenticated :user do
+  #   # Protected routes
+  #   resources :users
+  #   resources :organizations do
+  #     resources :campaigns do
+  #       resources :champions
+  #       resources :participants do
+  #         collection do
+  #           get :import
+  #           post :process_import
+  #         end
+  #       end
+  #     end
+  #     collection do
+  #       post :import_participants
+  #     end
+  #     resources :purchases
+  #   end
+  #   root to: "organizations#index", as: :user_root
+  # end
 
-  constraints(SubdomainRequired) do
-    # Put all your organization-scoped routes here
-    resources :users
-    resources :organizations do
-      resources :campaigns do
-        resources :champions
-        resources :participants do
-          collection do
-            get :import
-            post :process_import
-          end
+  # resources :users
+  devise_for :users, controllers: {
+    registrations: "user/registrations",
+    sessions: "user/sessions",
+    passwords: "user/passwords",
+    confirmations: "user/confirmations",
+    unlocks: "user/unlocks",
+    omniauth_callbacks: "user/omniauth_callbacks"
+  }
+  resources :organizations do
+    resources :campaigns do
+      resources :champions
+      resources :participants do
+        collection do
+          get :import
+          post :process_import
         end
       end
-      collection do
-        post :import_participants
-      end
-      resources :purchases
     end
+    collection do
+      post :import_participants
+    end
+    resources :purchases
   end
+  get "/dashboard", to: "organizations#show", as: :user_root
 
-  # Routes without subdomain requirement
-  constraints(SubdomainBlank) do
-    resources :registrations, only: [ :new, :create ]
-    resource :session
-    resources :passwords, param: :token
-    # public routes...
-    root "pages#index"
+  # resources :registrations, only: [ :new, :create ]
+  # resource :session
+  # resources :passwords, param: :token
 
-    get "up" => "rails/health#show", as: :rails_health_check
-  end
+  root "pages#index"
+
+  get "up" => "rails/health#show", as: :rails_health_check
 end

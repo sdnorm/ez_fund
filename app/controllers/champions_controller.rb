@@ -1,4 +1,8 @@
 class ChampionsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_organization
+  before_action :set_campaign
+
   def index
     @champions = @campaign.champions
   end

@@ -2,6 +2,7 @@ require "csv"
 
 class ParticipantsController < ApplicationController
   include Pagy::Backend
+  before_action :authenticate_user!
   before_action :set_organization
   before_action :set_campaign
 

@@ -15,7 +15,7 @@ class CampaignPolicy < ApplicationPolicy
     member?
   end
 
-  class Scope < Scope
+  class Scope
     def resolve
       scope.all
     end

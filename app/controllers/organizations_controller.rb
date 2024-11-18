@@ -1,18 +1,40 @@
 class OrganizationsController < ApplicationController
-  before_action :set_organization, only: %i[ show edit update destroy ]
-  before_action :set_current_user
+  layout "organization_setup", only: [ :new, :create ]
+  # skip_before_action :require_organization, only: [ :new, :create ]
+
+  before_action :authenticate_user!
+  before_action :set_organization, only: %i[ edit update destroy ]
 
   # GET /organizations or /organizations.json
   def index
-    @organizations = Organization.all
+    if current_user.last_organization_id.present?
+      @organization = Organization.find(current_user.last_organization_id)
+    else
+      redirect_to new_organization_path, alert: "You must create an organization before accessing the dashboard."
+    end
   end
 
   # GET /organizations/1 or /organizations/1.json
   def show
+    # @organization = Organization.find_by(subdomain: request.subdomain)
+    # if Current.session&.user
+    #   Current.session.user.update(last_organization_id: @organization.id)
+    # end
+    if current_user.last_organization_id.present?
+      @organization = Organization.find(current_user.last_organization_id)
+    else
+      redirect_to new_organization_path, alert: "You must create an organization before accessing the dashboard."
+    end
   end
 
   # GET /organizations/new
   def new
+    puts " "
+    puts " "
+    puts "Current user: #{current_user.inspect}"
+    puts " "
+    puts " "
+    @current_user = current_user
     @organization = Organization.new
   end
 
@@ -23,17 +45,16 @@ class OrganizationsController < ApplicationController
   # POST /organizations or /organizations.json
   def create
     @organization = Organization.new(organization_params)
+    @organization.owner = current_user
+    @organization.subdomain = @organization.name.parameterize
+    @organization.user_roles.build(user: current_user, role: :admin)
 
-    @organization.owner = @current_user
-    @organization.contact_email = @current_user.email_address
-    respond_to do |format|
-      if @organization.save
-        format.html { redirect_to @organization, notice: "Organization was successfully created." }
-        format.json { render :show, status: :created, location: @organization }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @organization.errors, status: :unprocessable_entity }
-      end
+    puts "Organization: #{@organization.inspect}"
+    if @organization.save
+      current_user.update(last_organization_id: @organization.id)
+      redirect_to user_root_path, notice: "Organization created successfully!"
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 

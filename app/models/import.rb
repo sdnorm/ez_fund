@@ -2,11 +2,11 @@ class Import < ApplicationRecord
   belongs_to :campaign
   has_one_attached :file
 
-  enum status: {
-    pending: "pending",
-    processing: "processing",
-    completed: "completed",
-    failed: "failed"
+  enum :status, {
+    pending: 0,
+    processing: 1,
+    completed: 2,
+    failed: 3
   }
 
   after_update_commit :cleanup_file, if: :completed?

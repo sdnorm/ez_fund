@@ -22,7 +22,9 @@
         <a href="#" class="text-sm/6 font-semibold text-gray-900">Company</a>
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        <%= link_to new_user_session_path, class: "text-sm/6 font-semibold text-gray-900 hover:underline" do %>
+          Log in <span aria-hidden="true">&rarr;</span>
+        <% end %>
       </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
@@ -51,7 +53,7 @@
               <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Company</a>
             </div>
             <div class="py-6">
-              <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Log in</a>
+              <%= link_to "Log in", new_user_session_path, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" %>
             </div>
           </div>
         </div>

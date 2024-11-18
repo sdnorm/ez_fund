@@ -11,7 +11,7 @@ class OrganizationPolicy < ApplicationPolicy
     admin?
   end
 
-  class Scope < Scope
+  class Scope
     def resolve
       if user.admin?(scope)
         scope.all
