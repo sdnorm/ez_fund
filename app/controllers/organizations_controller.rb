@@ -29,11 +29,6 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/new
   def new
-    puts " "
-    puts " "
-    puts "Current user: #{current_user.inspect}"
-    puts " "
-    puts " "
     @current_user = current_user
     @organization = Organization.new
   end

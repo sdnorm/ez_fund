@@ -14,12 +14,16 @@ class ParticipantsController < ApplicationController
   end
 
   def process_import
+    puts "process_import"
     if params[:file].present?
-      import = @campaign.imports.create!(
+      import = @campaign.imports.build(
         status: :pending,
         filename: params[:file].original_filename
       )
+      import.campaign = @campaign
+      import.save!
       import.file.attach(params[:file])
+
       ImportParticipantsJob.perform_later(import.id)
       redirect_to organization_campaign_path(@organization, @campaign),
         notice: "Import started. You will be notified when it is done or if there is an issue."
@@ -35,7 +39,7 @@ class ParticipantsController < ApplicationController
   private
 
   def set_organization
-    @organization = Organization.find(params[:organization_id])
+    @organization = current_user.organizations.find(params[:organization_id])
   end
 
   def set_campaign

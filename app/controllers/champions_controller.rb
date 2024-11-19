@@ -42,4 +42,14 @@ class ChampionsController < ApplicationController
     @champion.destroy
     redirect_to organization_campaign_champions_path(@organization, @campaign), notice: "Champion was successfully destroyed."
   end
+
+  private
+
+  def set_campaign
+    @campaign = Campaign.find(params[:campaign_id])
+  end
+
+  def set_organization
+    @organization = Organization.find(params[:organization_id])
+  end
 end

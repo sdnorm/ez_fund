@@ -3,17 +3,13 @@ class ImportParticipantsJob < ApplicationJob
 
   def perform(import_id)
     import = Import.find(import_id)
-    campaign = import.campaign
     import.update!(status: :processing)
-    import.file.open do |file|
-      campaign.import_participants_from_csv(file.path)
+    begin
+      Participant.import_from_csv(import)
+      import.mark_as_completed
+    rescue StandardError => e
+      import.update!(status: :failed)
+      raise e
     end
-    import.update!(status: :completed)
-  rescue StandardError => e
-    import.update!(
-      status: :failed,
-      error_message: e.message
-    )
-    raise e
   end
 end

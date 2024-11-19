@@ -1,11 +1,8 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable, :lockable, :trackable, :timeoutable,
          :omniauthable
-  # has_secure_password
 
   has_many :sessions, dependent: :destroy
   has_many :user_roles, dependent: :destroy
@@ -15,15 +12,17 @@ class User < ApplicationRecord
   normalizes :email, with: ->(e) { e.strip.downcase }
   validates_uniqueness_of :email
 
-  def owner?(org)
-    user_roles.find_by(organization: org)&.role == "owner"
+  def owner?(organization)
+    organization.owner == self
   end
 
-  def admin?(org)
-    user_roles.find_by(organization: org)&.role.in?(%w[owner admin])
+  def admin?(organization)
+    puts organization.inspect
+    return true if owner?(organization)
+    user_roles.exists?(organization: organization, role: "admin")
   end
 
-  def member?(org)
-    user_roles.find_by(organization: org).present?
+  def member?(organization)
+    user_roles.exists?(organization: organization)
   end
 end

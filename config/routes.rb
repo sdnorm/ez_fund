@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   end
   get "/dashboard", to: "organizations#show", as: :user_root
 
+  mount MissionControl::Jobs::Engine, at: "/jobs"
+
   # resources :registrations, only: [ :new, :create ]
   # resource :session
   # resources :passwords, param: :token

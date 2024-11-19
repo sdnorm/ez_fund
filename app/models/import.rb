@@ -9,11 +9,22 @@ class Import < ApplicationRecord
     failed: 3
   }
 
-  after_update_commit :cleanup_file, if: :completed?
+  # validates :file, presence: true
+  # validate :file_is_csv
+
+  def mark_as_completed
+    transaction do
+      update!(status: :completed)
+      file.purge if file.attached?
+    end
+  end
 
   private
 
-  def cleanup_file
-    file.purge if file.attached?
+  def file_is_csv
+    return unless file.attached?
+    unless file.content_type.in?([ "text/csv", "application/csv" ])
+      errors.add(:file, "must be a CSV file")
+    end
   end
 end
