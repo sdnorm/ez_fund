@@ -7,7 +7,7 @@ class ParticipantsController < ApplicationController
   before_action :set_campaign
 
   def index
-    @pagy, @participants = pagy(@campaign.participants, items: 25)
+    @pagy, @participants = pagy(@campaign.participants.includes(:purchases), items: 25)
   end
 
   def import
@@ -43,6 +43,6 @@ class ParticipantsController < ApplicationController
   end
 
   def set_campaign
-    @campaign = @organization.campaigns.find(params[:campaign_id])
+    @campaign = @organization.campaigns.includes(:champions).find(params[:campaign_id])
   end
 end
