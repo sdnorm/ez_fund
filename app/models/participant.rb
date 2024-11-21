@@ -1,20 +1,11 @@
-# == Schema Information
-#
-# Table name: participants
-#
-#  id                   :bigint           not null, primary key
-#  first_name           :string
-#  last_name            :string
-#  teacher              :string
-#  unique_calendar_link :string
-#  campaign_id          :bigint           not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#
 class Participant < ApplicationRecord
   belongs_to :campaign
   belongs_to :champion, optional: true
   has_many :purchases
+
+  validates :unique_calendar_link, uniqueness: true
+
+  before_create :generate_unique_calendar_link
 
   def total_money_raised
     purchases.successful_campaign_purchases(campaign).sum(:amount)
@@ -44,6 +35,22 @@ class Participant < ApplicationRecord
       end
     rescue CSV::MalformedCSVError => e
       raise ArgumentError, "Invalid CSV format: #{e.message}"
+    end
+  end
+
+  def generate_unique_calendar_link
+    max_attempts = 5
+    attempt = 0
+    begin
+      attempt += 1
+      self.unique_calendar_link = SecureRandom.uuid.delete("-")
+      self.save!
+    rescue ActiveRecord::RecordInvalid => e
+      if attempt < max_attempts && e.record.errors.include?(:unique_calendar_link)
+        Rails.logger.warn "Calendar link collision occurred (attempt #{attempt})"
+        retry
+      end
+      raise e
     end
   end
 

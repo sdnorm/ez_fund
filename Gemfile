@@ -79,3 +79,5 @@ gem "pundit"
 gem "madmin"
 gem "csv"
 gem "stringio", "~> 3.1"
+
+gem "rqrcode", "~> 2.0"

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   #           get :import
   #           post :process_import
   #         end
+  #         member do
+  #           get :download_qr_code
+  #         end
   #       end
   #     end
   #     collection do
@@ -30,12 +33,16 @@ Rails.application.routes.draw do
     omniauth_callbacks: "user/omniauth_callbacks"
   }
   resources :organizations do
+    resources :champions
     resources :campaigns do
       resources :champions
       resources :participants do
         collection do
           get :import
           post :process_import
+        end
+        member do
+          get :download_qr_code
         end
       end
     end

@@ -18,3 +18,6 @@ application.register('popover', Popover)
 application.register('slideover', Slideover)
 application.register('tabs', Tabs)
 application.register('toggle', Toggle)
+
+import Clipboard from '@stimulus-components/clipboard'
+application.register('clipboard', Clipboard)

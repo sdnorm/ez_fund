@@ -3,6 +3,6 @@
 
   <%= render "form", participant: @participant %>
 
-  <%= link_to "Show this participant", @participant, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  <%= link_to "Back to participants", participants_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <%= link_to "Show this participant", organization_campaign_participant_path(@organization, @campaign, @participant), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <%= link_to "Back to participants", organization_campaign_participants_path(@organization, @campaign), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
 </div>

@@ -1,4 +1,71 @@
-<div>
-  <h1 class="font-bold text-4xl">Champion#show</h1>
-  <p>Find me in app/views/champion/show.html.erb</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <%# Champion Header Section %>
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">
+            <%= @champion.name %>
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            <%= @champion.email_address %>
+          </p>
+        </div>
+        
+        <div class="flex gap-3">
+          <%= link_to "Edit", edit_organization_champion_path(@organization, @champion), 
+              class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" %>
+          
+          <%= button_to "Delete", organization_champion_path(@organization, @champion), 
+              method: :delete,
+              class: "inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700",
+              data: { turbo_confirm: "Are you sure?" } %>
+        </div>
+      </div>
+    </div>
+
+    <%# Stats Section %>
+    <div class="px-4 py-5 sm:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-lg font-medium text-gray-900">Total Participants</h3>
+          <p class="mt-2 text-3xl font-semibold text-gray-900">
+            <%= @champion.participants.count %>
+          </p>
+        </div>
+
+        <% if @campaign.present? %>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h3 class="text-lg font-medium text-gray-900">Campaign Participants</h3>
+            <p class="mt-2 text-3xl font-semibold text-gray-900">
+              <%= @champion.participants.where(campaign: @campaign).count %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Participants List Section %>
+    <div class="px-4 py-5 sm:p-6 border-t border-gray-200">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">
+        <%= @campaign.present? ? "Campaign Participants" : "All Participants" %>
+      </h2>
+
+      <div id="participants" class="divide-y divide-gray-200">
+        <% participants = @campaign.present? ? 
+             @champion.participants.where(campaign: @campaign) : 
+             @champion.participants %>
+
+        <%= render partial: "participants/participant", 
+            collection: participants,
+            locals: { show_campaign: !@campaign.present? } %>
+      </div>
+
+      <% if participants.empty? %>
+        <p class="text-gray-500 text-center py-8">
+          No participants found.
+        </p>
+      <% end %>
+    </div>
+  </div>
 </div>

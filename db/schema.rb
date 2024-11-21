@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_18_181943) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_21_013825) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -114,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_18_181943) do
     t.bigint "champion_id"
     t.index ["campaign_id"], name: "index_participants_on_campaign_id"
     t.index ["champion_id"], name: "index_participants_on_champion_id"
+    t.index ["unique_calendar_link"], name: "index_participants_on_unique_calendar_link", unique: true
   end
 
   create_table "purchases", force: :cascade do |t|

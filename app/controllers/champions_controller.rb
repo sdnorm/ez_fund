@@ -8,7 +8,8 @@ class ChampionsController < ApplicationController
   end
 
   def show
-    @champion = @campaign.champions.find(params[:id])
+    @champion = Champion.find(params[:id])
+    @campaign = Campaign.find(params[:campaign_id]) if params[:campaign_id]
   end
 
   def new
