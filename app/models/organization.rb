@@ -118,7 +118,7 @@ class Organization < ApplicationRecord
   def stripe_account_requirements
     status = stripe_account_status
     return [] unless status && status[:requirements]
-    
+
     status[:requirements][:currently_due] || []
   end
 end

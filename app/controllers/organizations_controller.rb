@@ -17,7 +17,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1 or /organizations/1.json
   def show
     @organization = Organization.find(params[:id])
-    
+
     if current_user.last_organization_id != @organization.id
       current_user.update(last_organization_id: @organization.id)
     end
@@ -76,27 +76,27 @@ class OrganizationsController < ApplicationController
 
   def stripe_connect
     @organization = Organization.find(params[:id])
-    
+
     begin
       onboarding_url = @organization.setup_stripe_connect_account
       if onboarding_url
         redirect_to onboarding_url, allow_other_host: true
       else
-        redirect_to organization_path(@organization), 
+        redirect_to organization_path(@organization),
                     alert: "Unable to setup Stripe Connect. Please try again."
       end
     rescue => e
       Rails.logger.error "Stripe Connect Error: #{e.message}"
-      redirect_to organization_path(@organization), 
+      redirect_to organization_path(@organization),
                   alert: "There was an error connecting to Stripe. Please try again."
     end
   end
 
   def stripe_dashboard
     @organization = Organization.find(params[:id])
-    
+
     if !@organization.stripe_connect_account_id?
-      redirect_to organization_path(@organization), 
+      redirect_to organization_path(@organization),
                   alert: "Please connect your Stripe account first."
       return
     end
@@ -106,12 +106,12 @@ class OrganizationsController < ApplicationController
       if dashboard_url
         redirect_to dashboard_url, allow_other_host: true
       else
-        redirect_to organization_path(@organization), 
+        redirect_to organization_path(@organization),
                     alert: "Stripe dashboard is not available. Please ensure your Stripe account is properly set up."
       end
     rescue => e
       Rails.logger.error "Stripe Dashboard Error: #{e.message}"
-      redirect_to organization_path(@organization), 
+      redirect_to organization_path(@organization),
                   alert: "Unable to access Stripe dashboard. Please try again."
     end
   end
