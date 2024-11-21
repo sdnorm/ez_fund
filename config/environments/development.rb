@@ -79,4 +79,10 @@ Rails.application.configure do
   config.hosts << ".localhost"
 
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+
+  # Set Stripe API keys from credentials
+  config.after_initialize do
+    Pay.stripe.public_key = Rails.application.credentials.dig(:stripe, :public_key)
+    Pay.stripe.private_key = Rails.application.credentials.dig(:stripe, :private_key)
+  end
 end

@@ -50,6 +50,10 @@ Rails.application.routes.draw do
       post :import_participants
     end
     resources :purchases
+    member do
+      get :stripe_connect
+      get :stripe_dashboard
+    end
   end
   get "/dashboard", to: "organizations#show", as: :user_root
 

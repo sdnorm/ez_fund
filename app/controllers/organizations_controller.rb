@@ -76,6 +76,21 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def stripe_connect
+    @organization = Organization.find(params[:id])
+    # authorize @organization # if using Pundit
+
+    @organization.setup_stripe_connect_account
+    redirect_to @organization.stripe_connect_url, allow_other_host: true
+  end
+
+  def stripe_dashboard
+    @organization = Organization.find(params[:id])
+    # authorize @organization # if using Pundit 
+
+    redirect_to @organization.stripe_dashboard_url, allow_other_host: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
