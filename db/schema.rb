@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_21_045158) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_21_193012) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -99,7 +99,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_045158) do
     t.datetime "updated_at", null: false
     t.string "time_zone"
     t.string "subdomain", null: false
+    t.string "stripe_connect_account_id"
     t.index ["owner_id"], name: "index_organizations_on_owner_id"
+    t.index ["stripe_connect_account_id"], name: "index_organizations_on_stripe_connect_account_id"
     t.index ["subdomain"], name: "index_organizations_on_subdomain", unique: true
   end
 

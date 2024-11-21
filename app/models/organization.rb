@@ -1,6 +1,4 @@
 class Organization < ApplicationRecord
-  pay_merchant
-
   belongs_to :owner, class_name: "User"
 
   has_many :user_roles, dependent: :destroy
@@ -13,7 +11,7 @@ class Organization < ApplicationRecord
   validates :name, presence: true
   validates :subdomain, presence: true, uniqueness: true
 
-  before_create :set_subdomain
+  before_create :set_subdomain, :set_stripe_as_processor
 
   def set_subdomain
     self.subdomain = name.parameterize
@@ -41,48 +39,86 @@ class Organization < ApplicationRecord
     users
   end
 
-  def setup_stripe_connect_account
-    return if merchant_processor.present?
+  pay_merchant
 
-    set_merchant_processor :stripe
-    merchant_processor.create_account(
+  def set_stripe_as_processor
+    self.merchant_processor :stripe
+  end
+
+  def setup_stripe_connect_account
+    return stripe_connect_url if stripe_connect_account_id.present?
+
+    account = Stripe::Account.create({
       type: "standard",
+      country: "US",
+      email: contact_email,
       capabilities: {
         card_payments: { requested: true },
         transfers: { requested: true }
-      },
-      business_type: "company",
-      settings: {
-        payouts: { schedule: { interval: "manual" } }
       }
-    )
+    })
+
+    # Store the account ID
+    update(stripe_connect_account_id: account.id)
+
+    # Generate the account link
+    account_link = Stripe::AccountLink.create({
+      account: account.id,
+      refresh_url: Rails.application.routes.url_helpers.organization_url(self),
+      return_url: Rails.application.routes.url_helpers.organization_url(self),
+      type: "account_onboarding"
+    })
+
+    account_link.url
   end
 
   def stripe_connect_url
-    return nil unless merchant_processor.present?
+    return nil unless stripe_connect_account_id
 
-    merchant_processor.account_link(
-      # refresh_url: Rails.application.routes.url_helpers.edit_organization_url(self, host: "#{subdomain}.#{ENV['APP_HOST']}"),
-      # return_url: Rails.application.routes.url_helpers.organization_url(self, host: "#{subdomain}.#{ENV['APP_HOST']}")
-      refresh_url: "http://localhost:3000/organizations/#{id}/stripe_connect",
-      return_url: "http://localhost:3000/organizations/#{id}/"
-    ).url
+    account_link = Stripe::AccountLink.create({
+      account: stripe_connect_account_id,
+      refresh_url: Rails.application.routes.url_helpers.organization_url(self),
+      return_url: Rails.application.routes.url_helpers.organization_url(self),
+      type: "account_onboarding"
+    })
+
+    account_link.url
   end
 
   def stripe_dashboard_url
-    return nil unless merchant_processor.present?
+    return nil unless stripe_connect_account_id
 
-    merchant_processor.login_link.url
+    # For Standard accounts, use the direct dashboard URL
+    "https://dashboard.stripe.com/#{stripe_connect_account_id}"
+  rescue => e
+    Rails.logger.error "Failed to generate Stripe dashboard URL: #{e.message}"
+    nil
   end
 
-  def stripe_account_ready?
-    return false unless merchant_processor.present?
+  def stripe_account_status
+    return nil unless stripe_connect_account_id
 
-    begin
-      account = merchant_processor.account
-      account.charges_enabled && account.payouts_enabled
-    rescue Stripe::PermissionError
-      false
-    end
+    account = Stripe::Account.retrieve(stripe_connect_account_id)
+    {
+      charges_enabled: account.charges_enabled,
+      details_submitted: account.details_submitted,
+      payouts_enabled: account.payouts_enabled,
+      requirements: account.requirements
+    }
+  rescue Stripe::InvalidRequestError => e
+    Rails.logger.error "Failed to retrieve Stripe account status: #{e.message}"
+    nil
+  end
+
+  def stripe_account_complete?
+    status = stripe_account_status
+    status && status[:details_submitted] && status[:charges_enabled] && status[:payouts_enabled]
+  end
+
+  def stripe_account_requirements
+    status = stripe_account_status
+    return [] unless status && status[:requirements]
+    
+    status[:requirements][:currently_due] || []
   end
 end

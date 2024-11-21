@@ -16,15 +16,13 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1 or /organizations/1.json
   def show
-    # @organization = Organization.find_by(subdomain: request.subdomain)
-    # if Current.session&.user
-    #   Current.session.user.update(last_organization_id: @organization.id)
-    # end
-    if current_user.last_organization_id.present?
-      @organization = Organization.find(current_user.last_organization_id)
-    else
-      redirect_to new_organization_path, alert: "You must create an organization before accessing the dashboard."
+    @organization = Organization.find(params[:id])
+    
+    if current_user.last_organization_id != @organization.id
+      current_user.update(last_organization_id: @organization.id)
     end
+  rescue ActiveRecord::RecordNotFound
+    redirect_to new_organization_path, alert: "Organization not found."
   end
 
   # GET /organizations/new
@@ -78,27 +76,54 @@ class OrganizationsController < ApplicationController
 
   def stripe_connect
     @organization = Organization.find(params[:id])
-    # authorize @organization # if using Pundit
-
-    @organization.setup_stripe_connect_account
-    redirect_to @organization.stripe_connect_url, allow_other_host: true
+    
+    begin
+      onboarding_url = @organization.setup_stripe_connect_account
+      if onboarding_url
+        redirect_to onboarding_url, allow_other_host: true
+      else
+        redirect_to organization_path(@organization), 
+                    alert: "Unable to setup Stripe Connect. Please try again."
+      end
+    rescue => e
+      Rails.logger.error "Stripe Connect Error: #{e.message}"
+      redirect_to organization_path(@organization), 
+                  alert: "There was an error connecting to Stripe. Please try again."
+    end
   end
 
   def stripe_dashboard
     @organization = Organization.find(params[:id])
-    # authorize @organization # if using Pundit 
+    
+    if !@organization.stripe_connect_account_id?
+      redirect_to organization_path(@organization), 
+                  alert: "Please connect your Stripe account first."
+      return
+    end
 
-    redirect_to @organization.stripe_dashboard_url, allow_other_host: true
+    begin
+      dashboard_url = @organization.stripe_dashboard_url
+      if dashboard_url
+        redirect_to dashboard_url, allow_other_host: true
+      else
+        redirect_to organization_path(@organization), 
+                    alert: "Stripe dashboard is not available. Please ensure your Stripe account is properly set up."
+      end
+    rescue => e
+      Rails.logger.error "Stripe Dashboard Error: #{e.message}"
+      redirect_to organization_path(@organization), 
+                  alert: "Unable to access Stripe dashboard. Please try again."
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
-      @organization = Organization.find(params.expect(:id))
+      @organization = Organization.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.expect(organization: [ :name, :address_1, :address_2, :city, :state, :contact_email ])
+      params.require(:organization).permit(:name, :address_1, :address_2, :city, :state, :contact_email)
     end
 end

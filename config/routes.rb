@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     end
     resources :purchases
     member do
-      get :stripe_connect
+      post :stripe_connect
       get :stripe_dashboard
     end
   end

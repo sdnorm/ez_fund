@@ -136,12 +136,80 @@
   </div>
 </div>
 
-<% unless @organization.stripe_account_ready? %>
-  <%= link_to "Connect with Stripe", stripe_connect_organization_path(@organization), 
-      class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-<% end %>
-
-<% if @organization.stripe_account_ready? %>
-  <%= link_to "Stripe Dashboard", stripe_dashboard_organization_path(@organization),
-      class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
-<% end %>
+<div class="mt-8 rounded-lg bg-white shadow">
+  <div class="px-4 py-5 sm:p-6">
+    <h3 class="text-base font-semibold leading-6 text-gray-900">
+      Stripe Connect Status
+    </h3>
+    
+    <% if @organization.stripe_connect_account_id.present? %>
+      <% if @organization.stripe_account_complete? %>
+        <div class="mt-2 max-w-xl text-sm text-gray-500">
+          <p class="text-green-600">
+            ✓ Your Stripe account is fully configured and ready to accept payments.
+          </p>
+        </div>
+      <% else %>
+        <div class="mt-2">
+          <div class="rounded-md bg-yellow-50 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-yellow-800">
+                  Action Required
+                </h3>
+                <div class="mt-2 text-sm text-yellow-700">
+                  <p>Your Stripe account needs additional information before you can accept payments:</p>
+                  <ul class="list-disc list-inside mt-1">
+                    <% @organization.stripe_account_requirements.each do |requirement| %>
+                      <li><%= requirement.humanize %></li>
+                    <% end %>
+                  </ul>
+                </div>
+                <div class="mt-4">
+                  <%= button_to stripe_connect_organization_path(@organization),
+                      data: { turbo: false },
+                      class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" do %>
+                    Complete Account Setup
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <div class="mt-5">
+        <%= button_to stripe_dashboard_organization_path(@organization),
+            data: { turbo: false },
+            method: :get,
+            form: { target: "_blank" },
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" do %>
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3 1h10v1H5V6zm10 3H5v1h10V9zm0 3H5v1h10v-1z" clip-rule="evenodd" />
+          </svg>
+          View Stripe Dashboard
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mt-2 max-w-xl text-sm text-gray-500">
+        <p>Connect your Stripe account to start accepting payments.</p>
+      </div>
+      <div class="mt-5">
+        <%= button_to stripe_connect_organization_path(@organization),
+            data: { turbo: false },
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" do %>
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+          </svg>
+          Connect with Stripe
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
