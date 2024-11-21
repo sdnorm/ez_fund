@@ -1,7 +1,7 @@
 module ParticipantsHelper
   def calendar_link_qr_code(url, size: 200)
     return nil if url.blank?
-    
+
     qrcode = RQRCode::QRCode.new(url)
     qrcode.as_svg(
       color: "000",

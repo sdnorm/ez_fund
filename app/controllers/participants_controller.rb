@@ -70,7 +70,7 @@ class ParticipantsController < ApplicationController
       resize_gte_to: false,
     )
 
-    send_data png.to_s, 
+    send_data png.to_s,
       filename: "calendar-qr-#{@participant.id}.png",
       type: "image/png",
       disposition: "attachment"
