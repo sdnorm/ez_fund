@@ -46,9 +46,9 @@ class Organization < ApplicationRecord
   end
 
   def setup_stripe_connect_account
-    return stripe_connect_url if stripe_connect_account_id.present?
-
-    account = Stripe::Account.create({
+    return nil unless stripe_connect_enabled?
+    
+    account = Stripe::Account.create(
       type: "standard",
       country: "US",
       email: contact_email,
@@ -56,20 +56,20 @@ class Organization < ApplicationRecord
         card_payments: { requested: true },
         transfers: { requested: true }
       }
-    })
+    )
 
-    # Store the account ID
     update(stripe_connect_account_id: account.id)
 
-    # Generate the account link
-    account_link = Stripe::AccountLink.create({
+    account_links = Stripe::AccountLink.create(
       account: account.id,
-      refresh_url: Rails.application.routes.url_helpers.organization_url(self),
+      refresh_url: Rails.application.routes.url_helpers.stripe_connect_organization_url(self),
       return_url: Rails.application.routes.url_helpers.organization_url(self),
       type: "account_onboarding"
-    })
+    )
 
-    account_link.url
+    # Validate URL before returning
+    return account_links.url if account_links.url&.start_with?("https://connect.stripe.com/")
+    nil
   end
 
   def stripe_connect_url
@@ -86,12 +86,11 @@ class Organization < ApplicationRecord
   end
 
   def stripe_dashboard_url
-    return nil unless stripe_connect_account_id
+    return nil unless stripe_connect_account_id?
 
-    # For Standard accounts, use the direct dashboard URL
-    "https://dashboard.stripe.com/#{stripe_connect_account_id}"
-  rescue => e
-    Rails.logger.error "Failed to generate Stripe dashboard URL: #{e.message}"
+    link = Stripe::Account.create_login_link(stripe_connect_account_id)
+    # Validate URL before returning
+    return link.url if link.url&.start_with?("https://dashboard.stripe.com/")
     nil
   end
 
@@ -120,5 +119,11 @@ class Organization < ApplicationRecord
     return [] unless status && status[:requirements]
 
     status[:requirements][:currently_due] || []
+  end
+
+  private
+
+  def stripe_connect_enabled?
+    Stripe.api_key.present?
   end
 end

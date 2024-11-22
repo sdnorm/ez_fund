@@ -23,4 +23,15 @@ class ApplicationController < ActionController::Base
       set_current_tenant(organization)
     end
   end
+
+  def safe_stripe_redirect(url, fallback_path, error_message = nil)
+    if url.present? && (
+      url.start_with?("https://connect.stripe.com/") ||
+      url.start_with?("https://dashboard.stripe.com/")
+    )
+      redirect_to url, allow_other_host: true
+    else
+      redirect_to fallback_path, alert: error_message || "Invalid redirect URL"
+    end
+  end
 end

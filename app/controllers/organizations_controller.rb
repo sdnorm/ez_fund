@@ -76,15 +76,15 @@ class OrganizationsController < ApplicationController
 
   def stripe_connect
     @organization = Organization.find(params[:id])
+    authorize @organization
 
     begin
       onboarding_url = @organization.setup_stripe_connect_account
-      if onboarding_url
-        redirect_to onboarding_url, allow_other_host: true
-      else
-        redirect_to organization_path(@organization),
-                    alert: "Unable to setup Stripe Connect. Please try again."
-      end
+      safe_stripe_redirect(
+        onboarding_url,
+        organization_path(@organization),
+        "Invalid Stripe Connect URL received. Please try again."
+      )
     rescue => e
       Rails.logger.error "Stripe Connect Error: #{e.message}"
       redirect_to organization_path(@organization),
@@ -94,6 +94,7 @@ class OrganizationsController < ApplicationController
 
   def stripe_dashboard
     @organization = Organization.find(params[:id])
+    authorize @organization
 
     if !@organization.stripe_connect_account_id?
       redirect_to organization_path(@organization),
@@ -103,12 +104,11 @@ class OrganizationsController < ApplicationController
 
     begin
       dashboard_url = @organization.stripe_dashboard_url
-      if dashboard_url
-        redirect_to dashboard_url, allow_other_host: true
-      else
-        redirect_to organization_path(@organization),
-                    alert: "Stripe dashboard is not available. Please ensure your Stripe account is properly set up."
-      end
+      safe_stripe_redirect(
+        dashboard_url,
+        organization_path(@organization),
+        "Invalid Stripe dashboard URL received. Please ensure your Stripe account is properly set up."
+      )
     rescue => e
       Rails.logger.error "Stripe Dashboard Error: #{e.message}"
       redirect_to organization_path(@organization),
