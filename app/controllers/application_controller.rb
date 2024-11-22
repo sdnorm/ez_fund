@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  set_referral_cookie
   include Pundit::Authorization
   # include RequiresOrganization
 

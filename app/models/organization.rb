@@ -1,4 +1,5 @@
 class Organization < ApplicationRecord
+  has_referrals
   belongs_to :owner, class_name: "User"
 
   has_many :user_roles, dependent: :destroy
