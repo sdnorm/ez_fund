@@ -47,7 +47,7 @@ class Organization < ApplicationRecord
 
   def setup_stripe_connect_account
     return nil unless stripe_connect_enabled?
-    
+
     account = Stripe::Account.create(
       type: "standard",
       country: "US",
