@@ -36,7 +36,7 @@ class CampaignsController < ApplicationController
     authorize @campaign
 
     if @campaign.update(campaign_params)
-      redirect_to @campaign, notice: "Campaign was successfully updated."
+      redirect_to organization_campaign_path(@organization, @campaign), notice: "Campaign was successfully updated."
     else
       render :edit
     end
