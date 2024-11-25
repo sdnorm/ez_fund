@@ -306,6 +306,8 @@ GEM
     rake (13.2.1)
     rdoc (6.8.1)
       psych (>= 4.0.0)
+    refer (1.0.1)
+      rails (>= 7.1.0)
     regexp_parser (2.9.2)
     reline (0.5.11)
       io-console (~> 0.5)
@@ -452,6 +454,7 @@ DEPENDENCIES
   puma (>= 5.0)
   pundit
   rails (~> 8.0.0)
+  refer
   rqrcode (~> 2.0)
   rubocop-rails-omakase
   selenium-webdriver

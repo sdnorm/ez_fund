@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_21_224949) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -255,6 +255,43 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_224949) do
     t.index ["participant_id"], name: "index_purchases_on_participant_id"
   end
 
+  create_table "refer_referral_codes", force: :cascade do |t|
+    t.string "referrer_type", null: false
+    t.bigint "referrer_id", null: false
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "referrals_count", default: 0
+    t.integer "visits_count", default: 0
+    t.index ["code"], name: "index_refer_referral_codes_on_code", unique: true
+    t.index ["referrer_type", "referrer_id"], name: "index_refer_referral_codes_on_referrer"
+  end
+
+  create_table "refer_referrals", force: :cascade do |t|
+    t.string "referrer_type", null: false
+    t.bigint "referrer_id", null: false
+    t.string "referee_type", null: false
+    t.bigint "referee_id", null: false
+    t.bigint "referral_code_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at", precision: nil
+    t.index ["referee_type", "referee_id"], name: "index_refer_referrals_on_referee"
+    t.index ["referral_code_id"], name: "index_refer_referrals_on_referral_code_id"
+    t.index ["referrer_type", "referrer_id"], name: "index_refer_referrals_on_referrer"
+  end
+
+  create_table "refer_visits", force: :cascade do |t|
+    t.bigint "referral_code_id", null: false
+    t.string "ip"
+    t.text "user_agent"
+    t.text "referrer"
+    t.string "referring_domain"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["referral_code_id"], name: "index_refer_visits_on_referral_code_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"
@@ -322,6 +359,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_224949) do
   add_foreign_key "purchases", "donors"
   add_foreign_key "purchases", "organizations"
   add_foreign_key "purchases", "participants"
+  add_foreign_key "refer_visits", "refer_referral_codes", column: "referral_code_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "user_roles", "organizations"
   add_foreign_key "user_roles", "users"
