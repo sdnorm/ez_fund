@@ -36,6 +36,13 @@
             </div>
           <% end %>
           
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Calendar Link</dt>
+            <dd class="mt-1 text-base text-gray-900">
+              <%= link_to "Calendar", calendar_path(code: @participant.unique_calendar_link), class: "text-blue-600 hover:text-blue-800" %>
+            </dd>
+          </div>
+
           <% if @participant.unique_calendar_link.present? %>
             <div class="col-span-2">
               <dt class="text-sm font-medium text-gray-500">Calendar link</dt>

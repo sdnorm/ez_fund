@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   private
 
   def set_tenant_from_organization
-    if params[:organization_id].present?
+    if current_user.present? && params[:organization_id].present?
       organization = Organization.find(params[:organization_id])
       set_current_tenant(organization)
     end

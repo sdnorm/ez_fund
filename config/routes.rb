@@ -55,6 +55,8 @@ Rails.application.routes.draw do
       get :stripe_dashboard
     end
   end
+  get "calendar", to: "calendar#main", as: :calendar
+  get "calendar/purchase", to: "calendar#detail", as: :calendar_detail
   get "/dashboard", to: "organizations#show", as: :user_root
 
   mount MissionControl::Jobs::Engine, at: "/jobs"

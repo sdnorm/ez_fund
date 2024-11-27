@@ -16,13 +16,21 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1 or /organizations/1.json
   def show
-    @organization = Organization.find(params[:id])
+    if current_user.present? && current_user.organizations.count == 1
+      @organization = current_user.organizations.first
+    elsif params[:id].present?
+      @organization = Organization.find(params[:id])
+    else
+      @organization = current_user.last_organization
+    end
 
     if current_user.last_organization_id != @organization.id
       current_user.update(last_organization_id: @organization.id)
     end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to new_organization_path, alert: "Organization not found."
+
+    if @organization.nil?
+      redirect_to new_organization_path, alert: "Organization not found."
+    end
   end
 
   # GET /organizations/new
