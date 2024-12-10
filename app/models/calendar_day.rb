@@ -1,6 +1,4 @@
 class CalendarDay < ApplicationRecord
-  include ActionView::RecordIdentifier
-
   belongs_to :campaign_participant
   belongs_to :calendar
 
