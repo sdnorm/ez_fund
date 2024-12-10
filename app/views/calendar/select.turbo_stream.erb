@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "calendar" do %>
+  <%= render "calendar", { calendar_days: @calendar_days, campaign_participant: @campaign_participant, campaign: @campaign } %>
+<% end %>

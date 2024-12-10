@@ -6,6 +6,9 @@ class CampaignParticipant < ApplicationRecord
 
   before_create :generate_unique_calendar_link
 
+  has_many :calendars
+  has_many :calendar_days, through: :calendars
+
   def generate_unique_calendar_link
     max_attempts = 5
     attempt = 0

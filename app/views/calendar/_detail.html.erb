@@ -11,7 +11,7 @@
       <div class="flex gap-2 flex-wrap">
         <% @selected_days.each do |day| %>
           <div class="bg-blue-500 text-white px-3 py-1 rounded">
-            Day <%= day %>: <%= number_to_currency(day) %>
+            Day <%= day.day %>: <%= number_to_currency(day.amount) %>
           </div>
         <% end %>
       </div>
@@ -20,7 +20,7 @@
     <%= render "calendar", calendar_days: @calendar_days %>
 
     <div class="mt-6">
-      <%= form_tag "", class: "space-y-4" do %>
+      <%= form_tag purchase_path, class: "space-y-4" do %>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <%= label_tag :first_name, "First Name", class: "block text-sm font-medium" %>

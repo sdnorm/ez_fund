@@ -2,25 +2,7 @@
   <h1 class="text-xl font-bold mb-4"><%= @participant.first_name %>'s Calendar</h1>
 
   <%= turbo_frame_tag "calendar" do %>
-    <div class="grid grid-cols-7 gap-2">
-      <% (1..31).each do |day| %>
-        <%= turbo_frame_tag "day_#{day}" do %>
-          <% calendar_day = @calendar_days.find_by(day: day) %>
-          <div class="border p-2 rounded <%= calendar_day_status_class(calendar_day) %>"
-               data-controller="calendar"
-               data-day="<%= day %>"
-               data-participant-id="<%= @participant.unique_calendar_link %>"
-               data-campaign-id="<%= @participant.campaign_id %>"
-               data-action="click->calendar#selectDay">
-            <div class="text-center"><%= day %></div>
-            <div class="text-sm text-center"><%= number_to_currency(day) %></div>
-            <% if calendar_day&.purchased? %>
-              <div class="text-sm text-center"><%= calendar_day.purchaser_name %></div>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+    <%= render "calendar", calendar_days: @calendar_days %>
   <% end %>
 
   <div class="mt-4">

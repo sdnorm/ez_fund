@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_27_200408) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_04_162106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,7 +51,31 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_27_200408) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "campaign_participant_id"
+    t.integer "calendar_number", default: 1
+    t.string "cookie_id"
+    t.bigint "calendar_id"
+    t.index ["calendar_id"], name: "index_calendar_days_on_calendar_id"
+    t.index ["campaign_participant_id", "calendar_number", "day"], name: "unique_day_per_calendar", unique: true
     t.index ["campaign_participant_id"], name: "index_calendar_days_on_campaign_participant_id"
+    t.index ["cookie_id"], name: "index_calendar_days_on_cookie_id"
+  end
+
+  create_table "calendar_sessions", force: :cascade do |t|
+    t.string "cookie_id"
+    t.bigint "campaign_participant_id", null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_participant_id"], name: "index_calendar_sessions_on_campaign_participant_id"
+    t.index ["cookie_id"], name: "index_calendar_sessions_on_cookie_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.bigint "campaign_participant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "calendar_number", default: 1
+    t.index ["campaign_participant_id"], name: "index_calendars_on_campaign_participant_id"
   end
 
   create_table "campaign_champions", force: :cascade do |t|
@@ -66,10 +90,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_27_200408) do
   create_table "campaign_participants", force: :cascade do |t|
     t.bigint "campaign_id", null: false
     t.bigint "participant_id", null: false
-    t.string "unique_calendar_link", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "champion_id"
+    t.string "unique_calendar_link"
     t.index ["campaign_id"], name: "index_campaign_participants_on_campaign_id"
     t.index ["champion_id"], name: "index_campaign_participants_on_champion_id"
     t.index ["participant_id"], name: "index_campaign_participants_on_participant_id"
@@ -370,6 +394,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_27_200408) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_days", "calendars"
+  add_foreign_key "calendar_sessions", "campaign_participants"
+  add_foreign_key "calendars", "campaign_participants"
   add_foreign_key "campaign_champions", "campaigns"
   add_foreign_key "campaign_champions", "champions"
   add_foreign_key "campaign_participants", "campaigns"

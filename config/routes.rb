@@ -59,6 +59,10 @@ Rails.application.routes.draw do
   get "calendar/purchase", to: "calendar#detail", as: :calendar_detail
   get "/dashboard", to: "organizations#show", as: :user_root
 
+  get "calendar/index", to: "calendar#index", as: :calendar_index
+  post "calendar/select", to: "calendar#select", as: :select_calendar_day
+  post "calendar/deselect", to: "calendar#deselect", as: :deselect_calendar_day
+
   mount MissionControl::Jobs::Engine, at: "/jobs"
 
   # resources :registrations, only: [ :new, :create ]

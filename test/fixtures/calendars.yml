@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campaign_participant: one
+  code: MyString
+
+two:
+  campaign_participant: two
+  code: MyString
