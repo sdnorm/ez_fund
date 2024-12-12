@@ -1,0 +1,32 @@
+<%= turbo_frame_tag "calendar_day_#{calendar_day.id}" do %>
+  <div id="<%= dom_id(calendar_day) %>">
+    <% if calendar_day.available? %>
+      <%= button_to select_calendar_day_path(code: campaign_participant.unique_calendar_link, selected_day: calendar_day.day),
+          data: { turbo_frame: "calendar" } do %>
+        <div class="border p-2 rounded <%= calendar_day_status_class(calendar_day) %>">
+          <div class="text-center"><%= calendar_day.day %></div>
+          <div class="text-sm text-center"><%= number_to_currency(calendar_day.amount) %></div>
+        </div>
+      <% end %>
+    <% elsif calendar_day.selected? && calendar_day.cookie_id == cookies[:calendar_session_cookie_id] %>
+      <%= button_to deselect_calendar_day_path(code: campaign_participant.unique_calendar_link, selected_day: calendar_day.day),
+          data: { turbo_frame: "calendar" } do %>
+        <div class="border p-2 rounded <%= calendar_day_status_class(calendar_day) %>">
+          <div class="text-center"><%= calendar_day.day %></div>
+          <div class="text-sm text-center"><%= number_to_currency(calendar_day.amount) %></div>
+        </div>
+      <% end %>
+    <% elsif calendar_day.selected? %>
+      <div class="border p-2 rounded <%= calendar_day_status_class(calendar_day) %>">
+        <div class="text-center"><%= calendar_day.day %></div>
+        <div class="text-sm text-center"><%= number_to_currency(calendar_day.amount) %></div>
+        <div class="text-xs text-center text-gray-500">Selected by another user</div>
+      </div>
+    <% elsif calendar_day.purchased? %>
+      <div class="border p-2 rounded <%= calendar_day_status_class(calendar_day) %>">
+        <div class="text-center"><%= calendar_day.day %></div>
+        <div class="text-sm text-center"><%= calendar_day.purchaser_name %></div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

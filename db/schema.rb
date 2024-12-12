@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_10_213207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,66 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "calendar_days", force: :cascade do |t|
+    t.integer "day"
+    t.decimal "amount", precision: 8, scale: 2
+    t.string "status"
+    t.string "purchaser_name"
+    t.datetime "purchased_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "campaign_participant_id"
+    t.integer "calendar_number", default: 1
+    t.string "cookie_id"
+    t.bigint "calendar_id"
+    t.datetime "selected_at"
+    t.index ["calendar_id"], name: "index_calendar_days_on_calendar_id"
+    t.index ["campaign_participant_id", "calendar_number", "day"], name: "unique_day_per_calendar", unique: true
+    t.index ["campaign_participant_id"], name: "index_calendar_days_on_campaign_participant_id"
+    t.index ["cookie_id"], name: "index_calendar_days_on_cookie_id"
+    t.index ["selected_at"], name: "index_calendar_days_on_selected_at"
+  end
+
+  create_table "calendar_sessions", force: :cascade do |t|
+    t.string "cookie_id"
+    t.bigint "campaign_participant_id", null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_participant_id"], name: "index_calendar_sessions_on_campaign_participant_id"
+    t.index ["cookie_id"], name: "index_calendar_sessions_on_cookie_id"
+  end
+
+  create_table "calendars", force: :cascade do |t|
+    t.bigint "campaign_participant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "calendar_number", default: 1
+    t.index ["campaign_participant_id"], name: "index_calendars_on_campaign_participant_id"
+  end
+
+  create_table "campaign_champions", force: :cascade do |t|
+    t.bigint "champion_id", null: false
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_campaign_champions_on_campaign_id"
+    t.index ["champion_id"], name: "index_campaign_champions_on_champion_id"
+  end
+
+  create_table "campaign_participants", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "participant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "champion_id"
+    t.string "unique_calendar_link"
+    t.index ["campaign_id"], name: "index_campaign_participants_on_campaign_id"
+    t.index ["champion_id"], name: "index_campaign_participants_on_champion_id"
+    t.index ["participant_id"], name: "index_campaign_participants_on_participant_id"
+    t.index ["unique_calendar_link"], name: "index_campaign_participants_on_unique_calendar_link", unique: true
+  end
+
   create_table "campaigns", force: :cascade do |t|
     t.bigint "organization_id", null: false
     t.datetime "start_date", null: false
@@ -60,10 +120,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
     t.string "first_name"
     t.string "last_name"
     t.string "email_address"
-    t.bigint "campaign_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["campaign_id"], name: "index_champions_on_campaign_id"
   end
 
   create_table "donors", force: :cascade do |t|
@@ -132,15 +190,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
   create_table "participants", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
-    t.string "teacher"
-    t.string "unique_calendar_link"
-    t.bigint "campaign_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "champion_id"
-    t.index ["campaign_id"], name: "index_participants_on_campaign_id"
-    t.index ["champion_id"], name: "index_participants_on_champion_id"
-    t.index ["unique_calendar_link"], name: "index_participants_on_unique_calendar_link", unique: true
   end
 
   create_table "pay_charges", force: :cascade do |t|
@@ -345,12 +396,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_040424) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_days", "calendars"
+  add_foreign_key "calendar_sessions", "campaign_participants"
+  add_foreign_key "calendars", "campaign_participants"
+  add_foreign_key "campaign_champions", "campaigns"
+  add_foreign_key "campaign_champions", "champions"
+  add_foreign_key "campaign_participants", "campaigns"
+  add_foreign_key "campaign_participants", "participants"
   add_foreign_key "campaigns", "organizations"
-  add_foreign_key "champions", "campaigns"
   add_foreign_key "imports", "campaigns"
   add_foreign_key "organizations", "users", column: "owner_id"
-  add_foreign_key "participants", "campaigns"
-  add_foreign_key "participants", "champions"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_charges", "pay_subscriptions", column: "subscription_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"

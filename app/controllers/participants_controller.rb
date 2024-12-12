@@ -5,6 +5,7 @@ class ParticipantsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_organization
   before_action :set_campaign
+  before_action :set_campaign_participant, only: [ :download_qr_code ]
 
   def index
     @pagy, @participants = pagy(@campaign.participants.includes(:purchases), items: 25)
@@ -55,9 +56,9 @@ class ParticipantsController < ApplicationController
   end
 
   def download_qr_code
-    return head :not_found unless @participant.unique_calendar_link.present?
+    return head :not_found unless @campaign_participant.unique_calendar_link.present?
 
-    qrcode = RQRCode::QRCode.new(@participant.unique_calendar_link)
+    qrcode = RQRCode::QRCode.new(@campaign_participant.unique_calendar_link)
     png = qrcode.as_png(
       bit_depth: 1,
       border_modules: 4,
@@ -88,5 +89,9 @@ class ParticipantsController < ApplicationController
 
   def set_campaign
     @campaign = @organization.campaigns.includes(:champions).find(params[:campaign_id])
+  end
+
+  def set_campaign_participant
+    @campaign_participant = @campaign.campaign_participants.find(params[:id])
   end
 end

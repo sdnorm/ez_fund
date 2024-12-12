@@ -1,0 +1,44 @@
+<%= turbo_frame_tag "calendar" do %>
+  <div class="max-w-3xl mx-auto p-4">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-xl font-bold"><%= @participant.first_name %>'s Calendar</h1>
+      <div class="text-xl">Selected Day: <%= @selected_day %></div>
+      <div class="text-xl">Total: <%= number_to_currency(@total) %></div>
+    </div>
+
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">Your Selected Days:</h2>
+      <div class="flex gap-2 flex-wrap">
+        <% @selected_days.each do |day| %>
+          <div class="bg-blue-500 text-white px-3 py-1 rounded">
+            Day <%= day.day %>: <%= number_to_currency(day.amount) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= render "calendar", calendar_days: @calendar_days %>
+
+    <div class="mt-6">
+      <%= form_tag purchase_path, class: "space-y-4" do %>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <%= label_tag :first_name, "First Name", class: "block text-sm font-medium" %>
+            <%= text_field_tag :first_name, nil, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+          </div>
+          <div>
+            <%= label_tag :last_name, "Last Name", class: "block text-sm font-medium" %>
+            <%= text_field_tag :last_name, nil, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+          </div>
+        </div>
+        <div>
+          <%= label_tag :email, "Email", class: "block text-sm font-medium" %>
+          <%= email_field_tag :email, nil, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
+        </div>
+        <div class="pt-4">
+          <%= submit_tag "Continue to Payment", class: "w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

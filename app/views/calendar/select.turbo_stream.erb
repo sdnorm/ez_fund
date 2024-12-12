@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "calendar" do %>
+  <% if flash.now[:alert] %>
+    <%= render "shared/alert", { alert: flash.now[:alert] } %>
+  <% end %>
+  <%= render "calendar/calendar", { calendar: @calendar, calendar_days: @calendar_days, campaign_participant: @campaign_participant, campaign: @campaign } %>
+<% end %>

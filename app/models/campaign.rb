@@ -3,8 +3,10 @@ class Campaign < ApplicationRecord
   belongs_to :organization
 
   has_many :purchases
-  has_many :participants
-  has_many :champions
+  has_many :campaign_champions
+  has_many :champions, through: :campaign_champions
+  has_many :campaign_participants
+  has_many :participants, through: :campaign_participants
 
   has_many :imports, dependent: :destroy
 
