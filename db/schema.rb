@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema[8.0].define(version: 2024_12_10_213207) do
-=======
-ActiveRecord::Schema[8.0].define(version: 2024_12_04_162106) do
->>>>>>> f4fab1a (select is working with turbo things and updating calendar days in the database)
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
