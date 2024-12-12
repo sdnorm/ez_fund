@@ -1,15 +1,16 @@
 <%= turbo_frame_tag "calendar" do %>
-  <h1>Calendar Cookie ID: <%= @cookie_id %></h1>
   <div class="max-w-3xl mx-auto">
     <% if @selected_days.present? %>
       <div class="mb-6">
         <h2 class="text-lg font-semibold mb-2">Your Selected Days:</h2>
         <div class="flex gap-2 flex-wrap">
           <% @selected_days.each do |day| %>
-            <div class="bg-blue-500 text-white px-3 py-1 rounded">
+            <div class="bg-blue-500 text-white px-3 py-1 rounded transition-colors duration-200">
               <%= day.day %>
-              <% if @current_calendar_session.present? %>
-                <%= calendar_day_status_class(day.status, current_calendar_session: @current_calendar_session.id) %>
+              <% if @current_calendar_session.present? && day.status.present? %>
+                <span class="text-sm">
+                  <%= display_day_status(day) %>
+                </span>
               <% end %>
             </div>
           <% end %>
@@ -28,7 +29,7 @@
 
     <div class="grid grid-cols-7 gap-2">
       <% calendar_days.each do |calendar_day| %>
-        <%= render "day", { calendar_day: calendar_day, campaign_participant: campaign_participant, campaign: campaign } %>
+        <%= render "calendar/day", { calendar: calendar, calendar_days: calendar_days, calendar_day: calendar_day, campaign_participant: campaign_participant, campaign: campaign } %>
       <% end %>
     </div>
   </div>

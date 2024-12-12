@@ -37,6 +37,10 @@ class Calendar < ApplicationRecord
     selected_days.sum(&:amount)
   end
 
+  def total_of_selected_days_for_calendar_session(cookie_id)
+    calendar_days.selected_days_for_calendar_session(cookie_id).sum(&:amount)
+  end
+
   def purchased_days
     calendar_days.purchased
   end

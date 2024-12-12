@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_04_162106) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_10_213207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,10 +54,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_04_162106) do
     t.integer "calendar_number", default: 1
     t.string "cookie_id"
     t.bigint "calendar_id"
+    t.datetime "selected_at"
     t.index ["calendar_id"], name: "index_calendar_days_on_calendar_id"
     t.index ["campaign_participant_id", "calendar_number", "day"], name: "unique_day_per_calendar", unique: true
     t.index ["campaign_participant_id"], name: "index_calendar_days_on_campaign_participant_id"
     t.index ["cookie_id"], name: "index_calendar_days_on_cookie_id"
+    t.index ["selected_at"], name: "index_calendar_days_on_selected_at"
   end
 
   create_table "calendar_sessions", force: :cascade do |t|

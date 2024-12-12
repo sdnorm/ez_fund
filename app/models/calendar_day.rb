@@ -1,4 +1,6 @@
 class CalendarDay < ApplicationRecord
+  include ActionView::RecordIdentifier
+
   belongs_to :campaign_participant
   belongs_to :calendar
 
@@ -12,8 +14,6 @@ class CalendarDay < ApplicationRecord
   validates :day, presence: true, numericality: { in: 1..31 }
   validates :amount, presence: true
   validates :day, uniqueness: { scope: [ :campaign_participant_id, :calendar_number ] }
-
-  broadcasts_to ->(calendar_day) { [ calendar_day.campaign_participant.participant, "calendar" ] }
 
   scope :for_calendar, ->(number) { where(calendar_number: number) }
   scope :selected_days, ->(campaign_participant:, status: "selected") {
@@ -70,26 +70,16 @@ class CalendarDay < ApplicationRecord
       .to_i + 1
   end
 
-  before_save :ensure_valid_session, if: :selected?
-
-  private
-
-  def ensure_valid_session
-    return unless cookie_id_changed?
-
-    session = CalendarSession.find_by(
-      cookie_id: cookie_id,
-      campaign_participant: campaign_participant
-    )
-
-    if session.nil?
-      session = CalendarSession.create!(
-        cookie_id: cookie_id,
-        campaign_participant: campaign_participant,
-        expires_at: 4.minutes.from_now
-      )
-    elsif session.expired?
-      session.update!(expires_at: 4.minutes.from_now)
-    end
-  end
+  # Turbo Streams broadcasting for real-time updates
+  # after_create_commit { broadcast_append_to calendar }
+  # after_update_commit { broadcast_replace_to calendar }
+  # after_update_commit { broadcast_replace_to calendar, partial: "calendar/calendar", locals: {
+  #   calendar: self.calendar,
+  #   calendar_days: self.calendar.calendar_days,
+  #   calendar_day: self,
+  #   campaign_participant: self.campaign_participant,
+  #   campaign: self.campaign_participant.campaign
+  # } }
+  # after_update_commit { broadcast_replace_to calendar, partial: "calendar/calednar_day", locals: { calendar_day: self, campaign_participant: campaign_participant } }
+  # after_destroy_commit { broadcast_remove_to calendar }
 end

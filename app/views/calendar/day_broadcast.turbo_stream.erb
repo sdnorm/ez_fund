@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@calendar_day) do %>
+  <%= render "day", calendar_day: @calendar_day, campaign_participant: @campaign_participant, campaign: @campaign %>
+<% end %> 
