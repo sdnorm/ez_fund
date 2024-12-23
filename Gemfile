@@ -16,6 +16,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
@@ -51,6 +52,11 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "minitest-rails"
+  gem "minitest-reporters"
 end
 
 group :development do
@@ -58,6 +64,11 @@ group :development do
   gem "web-console"
 
   gem "hotwire-spark"
+
+  gem "bullet"
+  gem "rack-mini-profiler"
+  gem "better_errors"
+  gem "binding_of_caller"
 end
 
 group :test do
@@ -67,3 +78,25 @@ group :test do
 end
 
 gem "stringio", "~> 3.1"
+
+gem "pay"
+gem "stripe"
+
+gem "devise"
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-microsoft-office365"
+gem "omniauth-google-oauth2"
+
+gem "madmin"
+
+gem "rqrcode"
+gem "prawn"
+gem "prawn-table"
+gem "csv"
+
+gem "sentry-ruby"
+gem "sentry-rails"
+
+gem "oj"
+gem "pagy"
