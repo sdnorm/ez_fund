@@ -1,0 +1,45 @@
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+  <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+    <%= render "shared/settings_nav" %>
+
+    <main class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+      <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Account Settings</h3>
+          
+          <div class="mt-5">
+            <div class="space-y-6">
+              <%= form_with(model: @user, url: user_registration_path, method: :put, class: "space-y-6") do |f| %>
+                <div>
+                  <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+                  <%= f.email_field :email, class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+                </div>
+
+                <div>
+                  <%= f.label :password, "New password", class: "block text-sm font-medium text-gray-700" %>
+                  <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+                  <p class="mt-2 text-sm text-gray-500">Leave blank if you don't want to change it</p>
+                </div>
+
+                <div>
+                  <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
+                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+                </div>
+
+                <div>
+                  <%= f.label :current_password, class: "block text-sm font-medium text-gray-700" %>
+                  <%= f.password_field :current_password, autocomplete: "current-password", class: "mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+                  <p class="mt-2 text-sm text-gray-500">We need your current password to confirm your changes</p>
+                </div>
+
+                <div class="flex justify-end">
+                  <%= f.submit "Update Account", class: "inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div> 
