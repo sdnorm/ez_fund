@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@calendar_day) do %>
+  <%= render partial: "calendar_days/day",
+             locals: { day: @calendar_day,
+                      parent_frame_id: dom_id(@calendar_day.calendar) } %>
+<% end %> 

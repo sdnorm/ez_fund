@@ -1,0 +1,9 @@
+<div>
+  <%= turbo_frame_tag dom_id(@calendar) do %>
+    <div class="grid grid-cols-7 gap-4">
+      <%= render @calendar.calendar_days.order(:day_number) %>
+    </div>
+  <% end %>
+
+  <%= render "calendar_days/selected_days", calendar: @calendar %>
+</div> 

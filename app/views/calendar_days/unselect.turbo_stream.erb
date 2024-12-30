@@ -1,0 +1,7 @@
+<%= turbo_stream.replace dom_id(@calendar_day) do %>
+  <%= render "calendar_days/calendar_day", calendar_day: @calendar_day %>
+<% end %>
+
+<%= turbo_stream.update "selected_days" do %>
+  <%= render "calendar_days/selected_days", calendar: @calendar_day.calendar %>
+<% end %> 

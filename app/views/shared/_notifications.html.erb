@@ -1,0 +1,29 @@
+<% if notice || alert %>
+  <div class="fixed inset-x-0 top-4 z-50 flex justify-center px-4"
+       data-controller="alert"
+       data-alert-dismiss-after-value="3000">
+    <% if notice %>
+      <div class="flex items-center gap-3 rounded-lg border-2 border-green-600 bg-green-50 px-4 py-3 text-green-700 shadow-md"
+           data-alert-target="alert"
+           role="alert">
+        <%= icon "check-circle", library: "heroicons", class: "h-5 w-5" %>
+        <p class="text-sm font-medium"><%= notice %></p>
+        <button data-action="alert#close" class="ml-auto">
+          <%= icon "x-mark", library: "heroicons", class: "h-5 w-5" %>
+        </button>
+      </div>
+    <% end %>
+
+    <% if alert %>
+      <div class="flex items-center gap-3 rounded-lg border-2 border-red-600 bg-red-50 px-4 py-3 text-red-700 shadow-md"
+           data-alert-target="alert"
+           role="alert">
+        <%= icon "exclamation-circle", library: "heroicons", class: "h-5 w-5" %>
+        <p class="text-sm font-medium"><%= alert %></p>
+        <button data-action="alert#close" class="ml-auto">
+          <%= icon "x-mark", library: "heroicons", class: "h-5 w-5" %>
+        </button>
+      </div>
+    <% end %>
+  </div>
+<% end %> 

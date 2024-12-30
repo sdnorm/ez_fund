@@ -29,3 +29,13 @@
 
 en:
   hello: "Hello world"
+  devise:
+    sessions:
+      signed_in: "Welcome back!"
+      signed_out: "You have been signed out."
+    registrations:
+      signed_up: "Welcome! Your account has been created."
+      updated: "Your account has been updated successfully."
+    passwords:
+      send_instructions: "You will receive an email with instructions to reset your password shortly."
+      updated: "Your password has been changed successfully."

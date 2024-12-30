@@ -1,0 +1,14 @@
+<div id="selected_days">
+  <% if calendar.calendar_days.selected.any? %>
+    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+      <h3 class="text-lg font-semibold mb-2">Selected Days</h3>
+      <div class="flex flex-wrap gap-2">
+        <% calendar.calendar_days.selected.each do |day| %>
+          <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
+            Day <%= day.day_number %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div> 

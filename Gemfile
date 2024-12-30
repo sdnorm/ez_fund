@@ -67,7 +67,6 @@ group :development do
 
   gem "bullet"
   gem "rack-mini-profiler"
-  gem "better_errors"
   gem "binding_of_caller"
 end
 
@@ -83,6 +82,7 @@ gem "pay"
 gem "stripe"
 
 gem "devise"
+gem "pundit"
 gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-microsoft-office365"
@@ -100,3 +100,7 @@ gem "sentry-rails"
 
 gem "oj"
 gem "pagy"
+
+gem "rails_icons"
+
+gem "acts_as_tenant"

@@ -1,0 +1,21 @@
+<%= turbo_frame_tag dom_id(day) do %>
+  <div class="relative p-4 border rounded-lg <%= day_status_classes(day) %>"
+       data-calendar-selection-target="day"
+       data-day-id="<%= day.id %>"
+       data-status="<%= day.status %>"
+       data-action="click->calendar-selection#selectDay">
+    
+    <div class="text-center">
+      <span class="text-lg font-bold"><%= day.day_number %></span>
+      
+      <% if day.selected? %>
+        <div class="text-sm text-gray-500">
+          Selected (<span data-controller="countdown"
+                         data-countdown-end-value="<%= day.selected_at + 4.minutes %>">
+            <%= distance_of_time_in_words(Time.current, day.selected_at + 4.minutes) %>
+          </span>)
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %> 

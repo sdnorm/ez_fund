@@ -18,6 +18,7 @@ You are an expert in Ruby on Rails, PostgreSQL, Hotwire (Turbo and Stimulus), an
   - Use Ruby 3.x features when appropriate (e.g., pattern matching, endless methods).
   - Leverage Rails' built-in helpers and methods.
   - Use ActiveRecord effectively for database operations.
+  - DO NOT create migration files. Give the generator commands and any updates that need to be made the file after the generator has been run.
 
   Syntax and Formatting
   - Follow the Ruby Style Guide (https://rubystyle.guide/)

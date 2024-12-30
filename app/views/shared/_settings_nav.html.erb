@@ -1,0 +1,21 @@
+<aside class="py-6 px-2 sm:px-6 lg:col-span-3 lg:py-0 lg:px-0">
+  <nav class="space-y-1">
+    <%= link_to settings_account_path, 
+        class: "group flex items-center rounded-md px-3 py-2 text-sm font-medium #{current_page?(settings_account_path) ? 'bg-gray-50 text-blue-600' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900'}" do %>
+      <%= icon "user-circle", library: "heroicons", class: "mr-3 h-6 w-6 flex-shrink-0 #{current_page?(settings_account_path) ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'}" %>
+      <span class="truncate">Account</span>
+    <% end %>
+
+    <%= link_to settings_profile_path,
+        class: "group flex items-center rounded-md px-3 py-2 text-sm font-medium #{current_page?(settings_profile_path) ? 'bg-gray-50 text-blue-600' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900'}" do %>
+      <%= icon "identification", library: "heroicons", class: "mr-3 h-6 w-6 flex-shrink-0 #{current_page?(settings_profile_path) ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'}" %>
+      <span class="truncate">Profile</span>
+    <% end %>
+
+    <%= link_to settings_organizations_path,
+        class: "group flex items-center rounded-md px-3 py-2 text-sm font-medium #{controller_name == 'organizations' ? 'bg-gray-50 text-blue-600' : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900'}" do %>
+      <%= icon "building-office", library: "heroicons", class: "mr-3 h-6 w-6 flex-shrink-0 #{controller_name == 'organizations' ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'}" %>
+      <span class="truncate">Organizations</span>
+    <% end %>
+  </nav>
+</aside> 

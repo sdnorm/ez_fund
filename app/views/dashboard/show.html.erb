@@ -1,0 +1,93 @@
+<div class="py-10">
+  <header>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Dashboard</h1>
+    </div>
+  </header>
+  <main>
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <!-- Main content -->
+      <div class="px-4 py-8 sm:px-0">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Organizations Card -->
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <%= icon "building-office", library: "heroicons", class: "h-6 w-6 text-gray-400" %>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Organizations</dt>
+                    <dd class="flex items-baseline">
+                      <div class="text-2xl font-semibold text-gray-900">
+                        <%= current_user.organizations.count %>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-5 py-3">
+              <%= link_to "#", class: "text-sm text-blue-700 font-medium hover:text-blue-900" do %>
+                View all
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Active Campaigns Card -->
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <%= icon "megaphone", library: "heroicons", class: "h-6 w-6 text-gray-400" %>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Active Campaigns</dt>
+                    <dd class="flex items-baseline">
+                      <div class="text-2xl font-semibold text-gray-900">
+                        <%= current_user.campaigns.count %>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-5 py-3">
+              <%= link_to "#", class: "text-sm text-blue-700 font-medium hover:text-blue-900" do %>
+                View all
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Total Raised Card -->
+          <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <%= icon "currency-dollar", library: "heroicons", class: "h-6 w-6 text-gray-400" %>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Total Raised</dt>
+                    <dd class="flex items-baseline">
+                      <div class="text-2xl font-semibold text-gray-900">
+                        $0.00
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-5 py-3">
+              <%= link_to "#", class: "text-sm text-blue-700 font-medium hover:text-blue-900" do %>
+                View details
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div> 
