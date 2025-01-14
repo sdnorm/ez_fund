@@ -10,15 +10,23 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def edit?
-    admin?
+    owner_or_admin?
   end
 
   def update?
-    admin?
+    owner_or_admin?
   end
 
   def switch?
-    member?
+    owner?
+  end
+
+  def create_account?
+    user.present? && owner_or_admin?
+  end
+
+  def onboarding?
+    user.present? && owner_or_admin?
   end
 
   private
@@ -29,5 +37,13 @@ class OrganizationPolicy < ApplicationPolicy
 
   def admin?
     record.organization_users.exists?(user: user, role: :admin)
+  end
+
+  def owner?
+    record.owner == user
+  end
+
+  def owner_or_admin?
+    owner? || admin?
   end
 end

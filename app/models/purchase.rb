@@ -1,12 +1,11 @@
 class Purchase < ApplicationRecord
   belongs_to :donor
-  has_many :calendar_days
+  belongs_to :calendar_day
 
-  after_create :mark_calendar_days_as_purchased
-
-  private
-
-  def mark_calendar_days_as_purchased
-    calendar_days.update_all(status: :purchased, purchased_at: Time.current)
+  # Calculate the platform fee and organization's portion
+  def calculate_fees
+    platform_fee = amount * (calendar_day.campaign_participant.campaign.organization.platform_fee_percentage / 100.0)
+    organization_portion = amount - platform_fee
+    { platform_fee: platform_fee, organization_portion: organization_portion }
   end
 end

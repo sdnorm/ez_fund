@@ -31,4 +31,9 @@ Rails.application.routes.draw do
       resources :invitations, only: [ :create, :destroy ]
     end
   end
+
+  get "stripe/connect", to: "stripe_connect#create_account"
+  get "stripe/onboarding", to: "settings/organizations#onboarding", as: :stripe_connect_onboarding
+  get "stripe_connect", to: "stripe_connect#create_account"
+  get "stripe_connect/dashboard", to: "stripe_connect#dashboard", as: :stripe_dashboard
 end

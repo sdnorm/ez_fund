@@ -1,0 +1,42 @@
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+  <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
+    <%= render "shared/settings_nav" %>
+
+    <main class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+      <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Edit Organization</h3>
+          
+          <div class="mt-5">
+            <%= form_with model: @organization, url: settings_organization_path(@organization), method: :patch, class: "space-y-4" do |form| %>
+              <%# Add form fields for organization settings here %>
+
+              <%= form.submit "Save Changes", class: "inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+            <% end %>
+          </div>
+
+          <div class="mt-5">
+            <% case stripe_account_status(@organization) %>
+            <% when :not_connected %>
+              <%= button_to "Connect with Stripe", stripe_connect_path, method: :get, data: { turbo: false }, 
+                  class: "inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" %>
+            <% when :incomplete %>
+              <%= button_to "Complete Stripe Setup", stripe_connect_path, method: :get, data: { turbo: false },
+                  class: "inline-flex justify-center rounded-md border border-transparent bg-yellow-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2" %>
+            <% when :active %>
+              <%= button_to "Stripe Dashboard", stripe_dashboard_path, method: :get, data: { turbo: false },
+                  class: "inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+            <% when :error %>
+              <%= button_to "Retry Stripe Connection", stripe_connect_path, method: :get, data: { turbo: false },
+                  class: "inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" %>
+            <% end %>
+          </div>
+
+          <div class="mt-5">
+            <%= link_to "Back to Organizations", settings_organizations_path, class: "inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" %>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div> 

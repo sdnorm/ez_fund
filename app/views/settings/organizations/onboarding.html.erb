@@ -1,0 +1,31 @@
+<!-- app/views/settings/organizations/onboarding.html.erb -->
+<div id="onboarding-container"></div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const stripe = Stripe("<%= Rails.application.credentials.dig(:stripe, :publishable_key) %>");
+
+    stripe.createAccountLink({
+      account: "<%= @organization.stripe_connect_id %>",
+      refresh_url: window.location.href,
+      return_url: "<%= edit_settings_organization_url(@organization) %>",
+      type: "account_onboarding"
+    }).then(function(result) {
+      if (result.error) {
+        console.error(result.error.message);
+      } else {
+        window.location.href = result.url;
+      }
+    });
+  });
+</script>
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Complete Stripe Onboarding</h3>
+      <div id="onboarding-container"></div>
+    </div>
+  </div>
+</div>

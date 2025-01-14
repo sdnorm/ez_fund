@@ -8,7 +8,7 @@ class PurchaseResource < Madmin::Resource
 
   # Associations
   attribute :donor
-  attribute :calendar_days
+  attribute :calendar_day
 
   # Add scopes to easily filter records
   # scope :published

@@ -10,9 +10,12 @@ class OrganizationResource < Madmin::Resource
   attribute :updated_at, form: false
 
   # Associations
+  attribute :owner
   attribute :organization_users
   attribute :users
   attribute :campaigns
+  attribute :pay_merchants
+  attribute :merchant_processor
 
   # Add scopes to easily filter records
   # scope :published

@@ -3,8 +3,9 @@ class OrganizationUser < ApplicationRecord
   belongs_to :user
 
   enum :role, {
-    admin: 0,
-    champion: 1
+    member: 0,
+    admin: 1,
+    champion: 2
   }
 
   validates :role, presence: true

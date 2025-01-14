@@ -28,4 +28,8 @@ class User < ApplicationRecord
     return Organization.find_by(id: current_organization_id) if current_organization_id.present?
     nil
   end
+
+  def admin?(organization)
+    organization_users.exists?(organization: organization, role: :admin)
+  end
 end
