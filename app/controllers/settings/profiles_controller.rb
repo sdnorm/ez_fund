@@ -22,4 +22,4 @@ module Settings
       params.require(:user).permit(:first_name, :last_name)
     end
   end
-end 
+end
