@@ -156,7 +156,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashie (5.0.0)
-    hotwire-spark (0.1.12)
+    hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
       zeitwerk
